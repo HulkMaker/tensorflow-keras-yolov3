@@ -1,5 +1,5 @@
 # tensorflow-keras-yolov3
-
+(cocoapi mAP计算在最下方↓↓↓)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
 ---
@@ -72,11 +72,6 @@ If you want to use original pretrained weights for YOLOv3:
     4. use model_data/darknet53_weights.h5 in train.py
 
 ---
-### Calcualte mAP on cocoapi
-
-Use `python yolo_valid.py` to test the official YOLOv3 weights.
-
----
 ### Some issues to know
 
 1. The test environment is
@@ -95,4 +90,9 @@ Use `python yolo_valid.py` to test the official YOLOv3 weights.
 6. The training strategy is for reference only. Adjust it according to your dataset and your goal. And add further strategy if needed.
 
 7. For speeding up the training process with frozen layers train_bottleneck.py can be used. It will compute the bottleneck features of the frozen model first and then only trains the last layers. This makes training on CPU possible in a reasonable time. See [this](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) for more information on bottleneck features.
+
+---
+### Calcualte mAP on cocoapi
+
+Use `python yolo_valid.py` to test the official YOLOv3 weights.
 # tensorflow-keras-yolov3
