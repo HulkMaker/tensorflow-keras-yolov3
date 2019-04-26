@@ -1,4 +1,8 @@
 """
+Created on April, 2019
+@authors: Hulking
+"""
+"""
 Retrain the YOLO model for your own dataset.
 """
 import os

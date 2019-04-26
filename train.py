@@ -13,7 +13,9 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, Ear
 from yolo3.model import preprocess_true_boxes, yolo_body, tiny_yolo_body, yolo_loss
 from yolo3.utils import get_random_data
 
-
+"""
+训练流程
+"""
 def _main():
     annotation_path = 'train.txt'
     log_dir = 'logs/000/'
@@ -87,14 +89,18 @@ def _main():
 
     # Further training if needed.
 
-
+"""
+获取类别
+"""
 def get_classes(classes_path):
     '''loads the classes'''
     with open(classes_path) as f:
         class_names = f.readlines()
     class_names = [c.strip() for c in class_names]
     return class_names
-
+"""
+获取锚点
+"""
 def get_anchors(anchors_path):
     '''loads the anchors from a file'''
     with open(anchors_path) as f:
@@ -102,7 +108,9 @@ def get_anchors(anchors_path):
     anchors = [float(x) for x in anchors.split(',')]
     return np.array(anchors).reshape(-1, 2)
 
-
+"""
+创建模型
+"""
 def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
             weights_path='model_data/yolo_weights.h5'):
     '''create the training model'''
@@ -132,7 +140,9 @@ def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze
     model = Model([model_body.input, *y_true], model_loss)
 
     return model
-
+"""
+创建阉割版模型
+"""
 def create_tiny_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
             weights_path='model_data/tiny_yolo_weights.h5'):
     '''create the training model, for Tiny YOLOv3'''
@@ -162,7 +172,9 @@ def create_tiny_model(input_shape, anchors, num_classes, load_pretrained=True, f
     model = Model([model_body.input, *y_true], model_loss)
 
     return model
-
+"""
+真值数据生成
+"""
 def data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes):
     '''data generator for fit_generator'''
     n = len(annotation_lines)

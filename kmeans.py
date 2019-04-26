@@ -1,6 +1,11 @@
+"""
+Created on April, 2019
+@authors: Hulking
+"""
 import numpy as np
-
-
+"""
+使用K-means算法计算锚点的最优选择
+"""
 class YOLO_Kmeans:
 
     def __init__(self, cluster_number, filename):

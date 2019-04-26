@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
+Created on April, 2019
 @authors: Hulking
-April 2019
 """
 import colorsys
 import os
@@ -19,7 +19,7 @@ import os
 from keras.utils import multi_gpu_model
 
 """
-YOLO 基本功能定义
+YOLO类 包含了针对模型的基本操作
 """
 class YOLO(object):
     _defaults = {
@@ -102,6 +102,11 @@ class YOLO(object):
                 score_threshold=self.score, iou_threshold=self.iou)
         return boxes, scores, classes
 
+    """
+    单张图片的预测：
+    输入：单张图片
+    返回：绘制了检测框 类别 概率的图片
+    """
     def detect_image(self, image):
         start = timer()
 
@@ -169,6 +174,12 @@ class YOLO(object):
         print(end - start)
         return image
 
+
+    """
+    单张图片的预测：
+    输入：单张图片
+    返回：检测框左上角和右下角的点坐标 分数 类别
+    """
     def valid_image(self, image):
         start = timer()
 
@@ -201,6 +212,11 @@ class YOLO(object):
     def close_session(self):
         self.sess.close()
 
+    """
+    视频预测：
+    输入：视频路径
+    返回：绘制了预测结果的视频
+    """
 def detect_video(yolo, video_path, output_path=""):
     import cv2
     vid = cv2.VideoCapture(video_path)

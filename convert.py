@@ -1,7 +1,10 @@
 #! /usr/bin/env python
 """
+Created on April, 2019
+@authors: Hulking
+"""
+"""
 Reads Darknet config and weights and creates Keras model with TF backend.
-
 """
 
 import argparse

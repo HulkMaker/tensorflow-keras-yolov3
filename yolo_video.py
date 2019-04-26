@@ -2,7 +2,9 @@ import sys
 import argparse
 from yolo import YOLO, detect_video
 from PIL import Image
-
+"""
+单张图片计算
+"""
 def detect_img(yolo):
     while True:
         img = input('Input image filename:')

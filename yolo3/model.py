@@ -1,3 +1,7 @@
+"""
+Created on April, 2019
+@authors: Hulking
+"""
 """YOLO_v3 Model Defined in Keras."""
 
 from functools import wraps
@@ -13,7 +17,9 @@ from keras.regularizers import l2
 
 from yolo3.utils import compose
 
-
+"""
+模型的组件
+"""
 @wraps(Conv2D)
 def DarknetConv2D(*args, **kwargs):
     """Wrapper to set Darknet parameters for Convolution2D."""
@@ -30,7 +36,9 @@ def DarknetConv2D_BN_Leaky(*args, **kwargs):
         DarknetConv2D(*args, **no_bias_kwargs),
         BatchNormalization(),
         LeakyReLU(alpha=0.1))
-
+"""
+残差
+"""
 def resblock_body(x, num_filters, num_blocks):
     '''A series of resblocks starting with a downsampling Convolution2D'''
     # Darknet uses left and top padding instead of 'same' mode
@@ -42,7 +50,9 @@ def resblock_body(x, num_filters, num_blocks):
                 DarknetConv2D_BN_Leaky(num_filters, (3,3)))(x)
         x = Add()([x,y])
     return x
-
+"""
+骨干网络darknet
+"""
 def darknet_body(x):
     '''Darknent body having 52 Convolution2D layers'''
     x = DarknetConv2D_BN_Leaky(32, (3,3))(x)
@@ -52,7 +62,9 @@ def darknet_body(x):
     x = resblock_body(x, 512, 8)
     x = resblock_body(x, 1024, 4)
     return x
-
+"""
+YOLO主体的组件
+"""
 def make_last_layers(x, num_filters, out_filters):
     '''6 Conv2D_BN_Leaky layers followed by a Conv2D_linear layer'''
     x = compose(
@@ -66,7 +78,9 @@ def make_last_layers(x, num_filters, out_filters):
             DarknetConv2D(out_filters, (1,1)))(x)
     return x, y
 
-
+"""
+YOLO主体
+"""
 def yolo_body(inputs, num_anchors, num_classes):
     """Create YOLO_V3 model CNN body in Keras."""
     darknet = Model(inputs, darknet_body(inputs))
@@ -85,7 +99,9 @@ def yolo_body(inputs, num_anchors, num_classes):
     x, y3 = make_last_layers(x, 128, num_anchors*(num_classes+5))
 
     return Model(inputs, [y1,y2,y3])
-
+"""
+阉割版的YOLO
+"""
 def tiny_yolo_body(inputs, num_anchors, num_classes):
     '''Create Tiny YOLO_v3 model CNN body in keras.'''
     x1 = compose(
@@ -118,7 +134,9 @@ def tiny_yolo_body(inputs, num_anchors, num_classes):
 
     return Model(inputs, [y1,y2])
 
-
+"""
+将yolo曾输出格式进行转换，便于进行eval
+"""
 def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
     """Convert final layer features to bounding box parameters."""
     num_anchors = len(anchors)
@@ -146,7 +164,9 @@ def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
         return grid, feats, box_xy, box_wh
     return box_xy, box_wh, box_confidence, box_class_probs
 
-
+"""
+检测框形式由 左上角点+宽高 转换为 左上角点+右下角点
+"""
 def yolo_correct_boxes(box_xy, box_wh, input_shape, image_shape):
     '''Get corrected boxes'''
     box_yx = box_xy[..., ::-1]
@@ -172,7 +192,9 @@ def yolo_correct_boxes(box_xy, box_wh, input_shape, image_shape):
     boxes *= K.concatenate([image_shape, image_shape])
     return boxes
 
-
+"""
+检测框和类别分数计算
+"""
 def yolo_boxes_and_scores(feats, anchors, num_classes, input_shape, image_shape):
     '''Process Conv layer output'''
     box_xy, box_wh, box_confidence, box_class_probs = yolo_head(feats,
@@ -183,7 +205,9 @@ def yolo_boxes_and_scores(feats, anchors, num_classes, input_shape, image_shape)
     box_scores = K.reshape(box_scores, [-1, num_classes])
     return boxes, box_scores
 
-
+"""
+将yolo层三个尺度的输出结果转换成检测框+分数+类别的形式
+"""
 def yolo_eval(yolo_outputs,
               anchors,
               num_classes,
@@ -228,7 +252,9 @@ def yolo_eval(yolo_outputs,
 
     return boxes_, scores_, classes_
 
-
+"""
+预处理真值的检测框
+"""
 def preprocess_true_boxes(true_boxes, input_shape, anchors, num_classes):
     '''Preprocess true boxes to training input format
 
@@ -300,7 +326,9 @@ def preprocess_true_boxes(true_boxes, input_shape, anchors, num_classes):
 
     return y_true
 
-
+"""
+计算检测框之间的交叠比
+"""
 def box_iou(b1, b2):
     '''Return iou tensor
 
@@ -341,7 +369,9 @@ def box_iou(b1, b2):
 
     return iou
 
-
+"""
+损失函数
+"""
 def yolo_loss(args, anchors, num_classes, ignore_thresh=.5, print_loss=False):
     '''Return yolo_loss tensor
 

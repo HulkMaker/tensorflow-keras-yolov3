@@ -1,3 +1,7 @@
+"""
+Created on April, 2019
+@authors: Hulking
+"""
 import xml.etree.ElementTree as ET
 from os import getcwd
 

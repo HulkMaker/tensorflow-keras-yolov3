@@ -5,7 +5,9 @@ from functools import reduce
 from PIL import Image
 import numpy as np
 from matplotlib.colors import rgb_to_hsv, hsv_to_rgb
-
+"""
+结构运算
+"""
 def compose(*funcs):
     """Compose arbitrarily many functions, evaluated left to right.
 
@@ -16,7 +18,9 @@ def compose(*funcs):
         return reduce(lambda f, g: lambda *a, **kw: g(f(*a, **kw)), funcs)
     else:
         raise ValueError('Composition of empty sequence not supported.')
-
+"""
+将载入图片以宽高比不变的条件下封装进固定大小的正方形图片里
+"""
 def letterbox_image(image, size):
     '''resize image with unchanged aspect ratio using padding'''
     iw, ih = image.size
@@ -29,7 +33,9 @@ def letterbox_image(image, size):
     new_image = Image.new('RGB', size, (128,128,128))
     new_image.paste(image, ((w-nw)//2, (h-nh)//2))
     return new_image
-
+"""
+随机数生成
+"""
 def rand(a=0, b=1):
     return np.random.rand()*(b-a) + a
 
