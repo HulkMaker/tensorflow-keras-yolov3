@@ -2,14 +2,9 @@
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-## Introduction
-
-A Keras implementation of YOLOv3 (Tensorflow backend) inspired by [allanzelener/YAD2K](https://github.com/allanzelener/YAD2K).
-
-
 ---
 
-## Quick Start
+### Quick Start
 
 1. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
 2. Convert the Darknet YOLO model to a Keras model.
@@ -24,6 +19,7 @@ python yolo_video.py [video_path] [output_path (optional)]
 
 For Tiny YOLOv3, just do in a similar way, just specify model path and anchor path with `--model model_file` and `--anchors anchor_file`.
 
+---
 ### Usage
 Use --help to see usage of yolo_video.py:
 ```
@@ -45,11 +41,9 @@ optional arguments:
   --gpu_num GPU_NUM  Number of GPU to use, default 1
   --image            Image detection mode, will ignore all positional arguments
 ```
----
-
 4. MultiGPU usage: use `--gpu_num N` to use N GPUs. It is passed to the [Keras multi_gpu_model()](https://keras.io/utils/#multi_gpu_model).
-
-## Training
+---
+### Training
 
 1. Generate your own annotation file and class names file.  
     One row for one image;  
@@ -78,8 +72,12 @@ If you want to use original pretrained weights for YOLOv3:
     4. use model_data/darknet53_weights.h5 in train.py
 
 ---
+### Calcualte mAP on cocoapi
 
-## Some issues to know
+Use `python yolo_valid.py` to test the official YOLOv3 weights.
+
+---
+### Some issues to know
 
 1. The test environment is
     - Python 3.5.2
