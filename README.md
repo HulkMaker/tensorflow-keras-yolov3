@@ -6,9 +6,16 @@
 
 ### Quick Start
 
-1. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
-2. Convert the Darknet YOLO model to a Keras model.
-3. Run YOLO detection.
+1. The test environment is
+    - Python 3.6.8
+    - Keras 2.2.0
+    - tensorflow 1.10.0
+    - pillow = 5.4.1
+    - matplotlib 3.0.2
+
+2. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
+3. Convert the Darknet YOLO model to a Keras model.
+4. Run YOLO detection.
 
 ```
 wget https://pjreddie.com/media/files/yolov3.weights
@@ -74,25 +81,20 @@ If you want to use original pretrained weights for YOLOv3:
 ---
 ### Some issues to know
 
-1. The test environment is
-    - Python 3.5.2
-    - Keras 2.1.5
-    - tensorflow 1.6.0
 
-2. Default anchors are used. If you use your own anchors, probably some changes are needed.
 
-3. The inference result is not totally the same as Darknet but the difference is small.
+1. Default anchors are used. If you use your own anchors, probably some changes are needed.
 
-4. The speed is slower than Darknet. Replacing PIL with opencv may help a little.
+2. The inference result is not totally the same as Darknet but the difference is small.
 
-5. Always load pretrained weights and freeze layers in the first stage of training. Or try Darknet training. It's OK if there is a mismatch warning.
+3. The speed is slower than Darknet. Replacing PIL with opencv may help a little.
 
-6. The training strategy is for reference only. Adjust it according to your dataset and your goal. And add further strategy if needed.
-
-7. For speeding up the training process with frozen layers train_bottleneck.py can be used. It will compute the bottleneck features of the frozen model first and then only trains the last layers. This makes training on CPU possible in a reasonable time. See [this](https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html) for more information on bottleneck features.
+4. Always load pretrained weights and freeze layers in the first stage of training. Or try Darknet training. It's OK if there is a mismatch warning.
 
 ---
 ### Calcualte mAP on cocoapi
-
-Use `python yolo_valid.py` to test the official YOLOv3 weights.
+1. pip install cython
+2. sudo rm -rf cocoapi && git clone https://github.com/cocodataset/cocoapi && cd cocoapi/PythonAPI && make && cd ../.. && cp -r cocoapi/PythonAPI/pycocotools tensorflow-keras-yolov3
+cd tensorflow-keras-yolov3
+3. Use `python yolo_valid.py` to test the official YOLOv3 weights.
 # tensorflow-keras-yolov3
