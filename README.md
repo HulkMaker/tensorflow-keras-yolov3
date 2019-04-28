@@ -1,5 +1,5 @@
 # tensorflow-keras-yolov3
-(cocoapi mAP计算在最下方↓↓↓)
+(cocoapi mAP计算在下方↓↓↓)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
 ---
@@ -7,6 +7,8 @@
 ### Quick Start
 
 1. The test environment is
+    - cudatoolkit  9.2
+    - cudnn 7.2.1
     - Python 3.6.8
     - Keras 2.2.0
     - tensorflow 1.10.0
@@ -14,20 +16,28 @@
     - matplotlib 3.0.2
 
 2. Download YOLOv3 weights from [YOLO website](http://pjreddie.com/darknet/yolo/).
-3. Convert the Darknet YOLO model to a Keras model.
-4. Run YOLO detection.
+3. Convert the Darknet YOLO model to a Keras model .h5 file. 
+4. Modified default converted model path in yolo.py line26 (default in '/home/common/pretrained_models/yolo.h5')
 
+### Run single image detection demo
 ```
 wget https://pjreddie.com/media/files/yolov3.weights
-python convert.py yolov3.cfg yolov3.weights model_data/yolo.h5
+python convert.py yolov3.cfg yolov3.weights /home/common/pretrained_models/yolo.h5
 python yolo_video.py [OPTIONS...] --image, for image detection mode, OR
 python yolo_video.py [video_path] [output_path (optional)]
+For Tiny YOLOv3, just do in a similar way, just specify model path and anchor path with `--model model_file` and `--anchors anchor_file`.
+```
+---
+### Calcualte mAP on cocoapi
+```
+1. cd tensorflow-keras-yolov3
+2. pip install cython # solution of issue:(gcc: error: pycocotools/_mask.c: No such file or directory)
+3. sudo rm -rf cocoapi && git clone https://github.com/cocodataset/cocoapi && cd cocoapi/PythonAPI && make && cd ../.. && cp -r cocoapi/PythonAPI/pycocotools ./
+4. Use `python yolo_valid.py` to test the official YOLOv3 weights.
 ```
 
-For Tiny YOLOv3, just do in a similar way, just specify model path and anchor path with `--model model_file` and `--anchors anchor_file`.
-
 ---
-### Usage
+### Other usage
 Use --help to see usage of yolo_video.py:
 ```
 usage: yolo_video.py [-h] [--model MODEL] [--anchors ANCHORS]
@@ -91,10 +101,5 @@ If you want to use original pretrained weights for YOLOv3:
 
 4. Always load pretrained weights and freeze layers in the first stage of training. Or try Darknet training. It's OK if there is a mismatch warning.
 
----
-### Calcualte mAP on cocoapi
-1. pip install cython
-2. sudo rm -rf cocoapi && git clone https://github.com/cocodataset/cocoapi && cd cocoapi/PythonAPI && make && cd ../.. && cp -r cocoapi/PythonAPI/pycocotools tensorflow-keras-yolov3
-cd tensorflow-keras-yolov3
-3. Use `python yolo_valid.py` to test the official YOLOv3 weights.
+
 # tensorflow-keras-yolov3
